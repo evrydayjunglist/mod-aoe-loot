@@ -21,6 +21,7 @@
 #include "Chat.h"
 #include "Player.h"
 #include "ScriptedGossip.h"
+#include <limits>
 
 enum AoeLootString
 {
@@ -49,13 +50,20 @@ public:
     void OnCreatureLootAOE(Player* player)
     {
         bool _enable = sConfigMgr->GetOption<bool>("AOELoot.Enable", true);
-
-        if (player->GetGroup() || !_enable)
+        bool _groupenable = sConfigMgr->GetOption<bool>("AOELoot.Group", true);
+        if(!_enable){ // terminates if not enabled
             return;
+        }
 
+        if (player->GetGroup() && !_groupenable) {// terminates if in a group and group mode not enabled
+            return;
+        }
+        int _range = sConfigMgr->GetOption<int>("AOELoot.Range",true);
         float range = 30.0f;
+        if(LegalLootRange(_range)){ //if the inputed ranged is a legal value change range to user defined value
+              range = float(_range);
+        }
         uint32 gold = 0;
-
         std::list<Creature*> creaturedie;
         player->GetDeadCreatureListInGrid(creaturedie, range);
 
@@ -136,7 +144,18 @@ public:
     {
         OnCreatureLootAOE(player);
     }
+    bool LegalLootRange(int TheorecticalRange) {
+    if (TheorecticalRange < 0) {
+        return false;
+    }
+    if (TheorecticalRange > std::numeric_limits<float>::max()) {
+        return false;
+    }
+    return true;
+    }
 };
+
+
 
 void AddSC_AoeLoot()
 {
