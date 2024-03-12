@@ -26,6 +26,23 @@
 AOELoot.Enable = 1
 
 #
+#   AOELoot.Group
+#	Description: Enables AOELoot while in a group
+#         Default:    0 - (Disabled)
+#                     1 - (Enabled)
+#
+
+AOELoot.Group = 1
+
+#
+#   AOELoot.Range
+#	Description: Sets aoeLoot Range
+#         Default:    30
+#
+
+AOELoot.Range = 30
+
+#
 #   AOELoot.MailEnable
 #       Description: Enables the sending of mail if there are no spaces in the bags.
 #       Default:    1 (Enabled)
